@@ -1,5 +1,7 @@
 package openstack.contributhon.com.openstackcontroller;
 
+import android.util.Log;
+
 import java.io.IOException;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
@@ -22,7 +24,7 @@ public class Config {
             ErrorMessage restError  = (ErrorMessage) retrofit.responseBodyConverter( ErrorMessage.class, ErrorMessage.class.getAnnotations()).convert(error);
             return restError.getMesage(id);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(MY_TAG,e.toString());
         }
         return "Error Message is gone";
     }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import openstack.contributhon.com.openstackcontroller.IRestApi;
@@ -27,6 +28,8 @@ public class ActionFragment extends Fragment {
     protected View.OnClickListener mActionHandler;
     private ViewGroup.LayoutParams mLayoutParams;
     protected TextView mStatusView;
+    protected ProgressBar mLoadingBar;
+    protected boolean mIsLoading;
 
     @Nullable
     @Override
@@ -36,11 +39,12 @@ public class ActionFragment extends Fragment {
         mMyview = view.findViewById(R.id.action_logo);
         mContainer = view.findViewById(R.id.container);
         mStatusView = view.findViewById(R.id.action_status);
-        Retrofit retrofit = new Retrofit.Builder()
+        mLoadingBar = view.findViewById(R.id.loading);
+        mRetrofit = new Retrofit.Builder()
                 .baseUrl(cHost)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        mInterface = retrofit.create(IRestApi.class);
+        mInterface = mRetrofit.create(IRestApi.class);
         return view;
     }
 

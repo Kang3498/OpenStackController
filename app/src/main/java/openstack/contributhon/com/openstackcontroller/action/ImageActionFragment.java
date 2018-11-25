@@ -14,6 +14,9 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static openstack.contributhon.com.openstackcontroller.Config.MY_TAG;
 import static openstack.contributhon.com.openstackcontroller.Config.cDetailId;
 import static openstack.contributhon.com.openstackcontroller.Config.cToken;
@@ -58,6 +61,7 @@ public class ImageActionFragment extends ActionFragment {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
+                                mIsLoading = false;
                             }
 
                             @Override
@@ -69,6 +73,10 @@ public class ImageActionFragment extends ActionFragment {
 
                         break;
                 }
+                if(mIsLoading)
+                    return;
+                mLoadingBar.setVisibility(VISIBLE);
+                mIsLoading = true;
             }
         };
 
@@ -78,6 +86,8 @@ public class ImageActionFragment extends ActionFragment {
     }
 
     public void update(String status) {
+        if(!mIsLoading)
+            mLoadingBar.setVisibility(GONE);
         if (status.equals("active")) {
             activeBtn.setText("Deactivate");
             isActive = true;

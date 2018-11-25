@@ -2,8 +2,10 @@ package openstack.contributhon.com.openstackcontroller.detail;
 
 import android.support.v4.util.Pair;
 
-import openstack.contributhon.com.openstackcontroller.action.FlavorActionFragment;
-import openstack.contributhon.com.openstackcontroller.glance.ImageVO;
+import openstack.contributhon.com.openstackcontroller.model.ImageVO;
+
+import static android.view.View.GONE;
+
 public class ImageDetailFragment extends DetailFragment {
 
     public static ImageDetailFragment newInstance() {
@@ -11,6 +13,7 @@ public class ImageDetailFragment extends DetailFragment {
     }
 
     public void setAll(ImageVO image){
+        mLoadingBar.setVisibility(GONE);
         mItemList.clear();
         mItemList.add(Pair.create("Name","Value"));
         mItemList.add(Pair.create("name",image.name));

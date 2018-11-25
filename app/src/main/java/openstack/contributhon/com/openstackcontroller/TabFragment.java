@@ -7,13 +7,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import static openstack.contributhon.com.openstackcontroller.Config.DETAIL;
-import static openstack.contributhon.com.openstackcontroller.Config.MY_TAG;
+import static openstack.contributhon.com.openstackcontroller.Config.cCurrentFragmentId;
 import static openstack.contributhon.com.openstackcontroller.Config.cCurrentTab;
 
 public class TabFragment extends Fragment {
@@ -30,7 +30,20 @@ public class TabFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mElevation = ((AppCompatActivity)getActivity()).getSupportActionBar().getElevation();
         ((AppCompatActivity)getActivity()).getSupportActionBar().setElevation(0);
-        View view = inflater.inflate(R.layout.fragment_serverdetail, container, false);
+        View view = null;
+        switch (cCurrentFragmentId) {
+            case R.id.menu_instance:
+            case R.id.menu_image:
+                view = inflater.inflate(R.layout.fragment_tabwithaction, container, false);
+                break;
+            case R.id.menu_flavor:
+            case R.id.menu_keypair:
+            case R.id.menu_network:
+            case R.id.menu_router:
+            default:
+                view = inflater.inflate(R.layout.fragment_tab, container, false);
+                break;
+        }
         TabLayout tabLayout = view.findViewById(R.id.tabs);
         tabLayout.setElevation(mElevation);
         final ViewPager viewPager = view.findViewById(R.id.main_viewpager);
@@ -42,6 +55,7 @@ public class TabFragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 cCurrentTab = tab.getPosition();
+                mTabAdapter.refresh();
                 viewPager.setCurrentItem(tab.getPosition());
             }
             @Override

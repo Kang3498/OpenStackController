@@ -2,8 +2,9 @@ package openstack.contributhon.com.openstackcontroller.detail;
 
 import android.support.v4.util.Pair;
 
-import openstack.contributhon.com.openstackcontroller.action.FlavorActionFragment;
-import openstack.contributhon.com.openstackcontroller.nova.Model.FlavorVO;
+import openstack.contributhon.com.openstackcontroller.model.FlavorVO;
+
+import static android.view.View.GONE;
 
 public class FlavorDetailFragment extends DetailFragment {
 
@@ -12,6 +13,7 @@ public class FlavorDetailFragment extends DetailFragment {
     }
 
     public void setAll(FlavorVO flavor){
+        mLoadingBar.setVisibility(GONE);
         mItemList.clear();
         mItemList.add(Pair.create("Name", "Value"));
         mItemList.add(Pair.create("name", flavor.name));

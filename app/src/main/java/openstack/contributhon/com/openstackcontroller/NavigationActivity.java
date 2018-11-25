@@ -12,7 +12,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,12 +19,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import openstack.contributhon.com.openstackcontroller.glance.ImageList;
-import openstack.contributhon.com.openstackcontroller.neutron.NetworkList;
-import openstack.contributhon.com.openstackcontroller.neutron.RouterList;
-import openstack.contributhon.com.openstackcontroller.nova.Fragment.KeypairList;
-import openstack.contributhon.com.openstackcontroller.nova.Fragment.FlavorList;
-import openstack.contributhon.com.openstackcontroller.nova.Fragment.InstanceList;
+import openstack.contributhon.com.openstackcontroller.list.ImageList;
+import openstack.contributhon.com.openstackcontroller.list.NetworkList;
+import openstack.contributhon.com.openstackcontroller.list.RouterList;
+import openstack.contributhon.com.openstackcontroller.list.KeypairList;
+import openstack.contributhon.com.openstackcontroller.list.FlavorList;
+import openstack.contributhon.com.openstackcontroller.list.InstanceList;
 
 import static openstack.contributhon.com.openstackcontroller.Config.*;
 

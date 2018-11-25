@@ -2,8 +2,9 @@ package openstack.contributhon.com.openstackcontroller.detail;
 
 import android.support.v4.util.Pair;
 
-import openstack.contributhon.com.openstackcontroller.action.FlavorActionFragment;
-import openstack.contributhon.com.openstackcontroller.neutron.RouterVO;
+import openstack.contributhon.com.openstackcontroller.model.RouterVO;
+
+import static android.view.View.GONE;
 
 public class RouterDetailFragment extends DetailFragment {
 
@@ -12,6 +13,7 @@ public class RouterDetailFragment extends DetailFragment {
     }
 
     public void setAll(RouterVO router){
+        mLoadingBar.setVisibility(GONE);
         mItemList.clear();
         mItemList.add(Pair.create("Name", "Value"));
         mItemList.add(Pair.create("name", router.name));
@@ -21,6 +23,7 @@ public class RouterDetailFragment extends DetailFragment {
         mItemList.add(Pair.create("project_id", router.project_id));
         mItemList.add(Pair.create("tenant_id", router.tenant_id));
         mItemList.add(Pair.create("service_type_id", router.service_type_id));
+        mItemList.add(Pair.create("admin_state_up", router.admin_state_up));
         if(router.routes.size() > 0) {
             mItemList.add(Pair.create("routes:destination", router.routes.get(0).destination));
             mItemList.add(Pair.create("routes:nexthoop", router.routes.get(0).nexthop));

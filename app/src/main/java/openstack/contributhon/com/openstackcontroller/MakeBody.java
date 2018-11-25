@@ -14,6 +14,21 @@ public class MakeBody {
         Log.e(MY_TAG,value);
         return body;
     }
+
+    public static RequestBody editServer(String name){
+        String value = "{\"server\":{\"name\":\"" + name + "\"}}";
+        RequestBody body = RequestBody.create(MediaType.parse("text/plain"), value);
+        Log.e(MY_TAG,value);
+        return body;
+    }
+
+
+    public static RequestBody rebootServer(){
+        String value = "{\"reboot\":{\"type\":\"HARD\"}}";
+        RequestBody body = RequestBody.create(MediaType.parse("text/plain"), value);
+        Log.e(MY_TAG,value);
+        return body;
+    }
     public static RequestBody action(String action){
         String value = "{\"" + action + "\" : null}";
         RequestBody body = RequestBody.create(MediaType.parse("text/plain"), value);
@@ -31,6 +46,13 @@ public class MakeBody {
         RequestBody body = RequestBody.create(MediaType.parse("text/plain"), value);
         return body;
     }
+    public static RequestBody editImage(String name, String container, String disk){
+        String value = "[{\"op\":\"replace\",\"path\":\"/name\",\"value\":\"" + name + "\"},\t{\"op\":\"replace\",\"path\":\"/container_format\",\"value\":\"" + container + "\"},\t{\"op\":\"replace\",\"path\":\"/disk_format\",\"value\":\"" + disk + "\"}]";
+        Log.e(MY_TAG,value);
+        RequestBody body = RequestBody.create(MediaType.parse("text/plain"), value);
+        return body;
+    }
+
     public static RequestBody createFlavor(String name, String ram, String vcpus, String disk){
         String value = "{\"flavor\":{\"name\":\"" + name + "\",\"ram\":" + ram + ",\"vcpus\":" + vcpus + ",\"disk\":" + disk + "}}";
         RequestBody body = RequestBody.create(MediaType.parse("text/plain"), value);
@@ -46,14 +68,12 @@ public class MakeBody {
     public static RequestBody createNetwork(String name, String admin_state_up, String mtu){
         String value = "{\"network\":{\"name\":\"" + name + "\",\"admin_state_up\":" + admin_state_up + ",\"mtu\":" + mtu + "}}";
         RequestBody body = RequestBody.create(MediaType.parse("text/plain"), value);
-        Log.e(MY_TAG,value);
         return body;
     }
 
     public static RequestBody createRouter(String name, String admin_state_up){
         String value = "{\"router\":{\"name\":\"" + name + "\",\"admin_state_up\":" + admin_state_up + "}}";
         RequestBody body = RequestBody.create(MediaType.parse("text/plain"), value);
-        Log.e(MY_TAG,value);
         return body;
     }
 

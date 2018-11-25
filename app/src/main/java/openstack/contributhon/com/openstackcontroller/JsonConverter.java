@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-import openstack.contributhon.com.openstackcontroller.glance.ImageVO;
-import openstack.contributhon.com.openstackcontroller.neutron.NetworkVO;
-import openstack.contributhon.com.openstackcontroller.neutron.RouterVO;
-import openstack.contributhon.com.openstackcontroller.nova.Model.Keypair;
-import openstack.contributhon.com.openstackcontroller.nova.Model.FlavorVO;
-import openstack.contributhon.com.openstackcontroller.nova.Model.KeypairVO;
-import openstack.contributhon.com.openstackcontroller.nova.Model.ServerVO;
+import openstack.contributhon.com.openstackcontroller.model.ImageVO;
+import openstack.contributhon.com.openstackcontroller.model.NetworkVO;
+import openstack.contributhon.com.openstackcontroller.model.RouterVO;
+import openstack.contributhon.com.openstackcontroller.model.Keypair;
+import openstack.contributhon.com.openstackcontroller.model.FlavorVO;
+import openstack.contributhon.com.openstackcontroller.model.KeypairVO;
+import openstack.contributhon.com.openstackcontroller.model.ServerVO;
 
 public class JsonConverter {
 

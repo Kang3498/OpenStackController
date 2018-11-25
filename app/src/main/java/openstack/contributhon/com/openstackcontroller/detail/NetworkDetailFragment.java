@@ -2,8 +2,9 @@ package openstack.contributhon.com.openstackcontroller.detail;
 
 import android.support.v4.util.Pair;
 
-import openstack.contributhon.com.openstackcontroller.action.FlavorActionFragment;
-import openstack.contributhon.com.openstackcontroller.neutron.NetworkVO;
+import openstack.contributhon.com.openstackcontroller.model.NetworkVO;
+
+import static android.view.View.GONE;
 
 public class NetworkDetailFragment extends DetailFragment {
 
@@ -12,6 +13,7 @@ public class NetworkDetailFragment extends DetailFragment {
     }
 
     public void setAll(NetworkVO network){
+        mLoadingBar.setVisibility(GONE);
         mItemList.clear();
         mItemList.add(Pair.create("Name", "Value"));
         mItemList.add(Pair.create("name", network.name));

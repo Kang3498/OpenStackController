@@ -2,8 +2,10 @@ package openstack.contributhon.com.openstackcontroller.detail;
 
 import android.support.v4.util.Pair;
 
-import openstack.contributhon.com.openstackcontroller.action.FlavorActionFragment;
-import openstack.contributhon.com.openstackcontroller.nova.Model.Keypair;
+import openstack.contributhon.com.openstackcontroller.model.Keypair;
+
+import static android.view.View.GONE;
+
 public class KeypairDetailFragment extends DetailFragment {
 
     public static KeypairDetailFragment newInstance() {
@@ -12,6 +14,7 @@ public class KeypairDetailFragment extends DetailFragment {
 
 
     public void setAll(Keypair keypair){
+        mLoadingBar.setVisibility(GONE);
         mItemList.clear();
         mItemList.add(Pair.create("Name", "Value"));
         mItemList.add(Pair.create("name", keypair.name));

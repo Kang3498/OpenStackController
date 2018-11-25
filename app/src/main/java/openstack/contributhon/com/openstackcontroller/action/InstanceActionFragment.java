@@ -12,17 +12,20 @@ import android.widget.Toast;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import openstack.contributhon.com.openstackcontroller.MakeBody;
+import openstack.contributhon.com.openstackcontroller.model.ServerVO;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static openstack.contributhon.com.openstackcontroller.Config.*;
 
 public class InstanceActionFragment extends ActionFragment {
     private Button mStartBtn, mLockBtn;
     private boolean isStart;
     private int mBtnIdx = 0;
-    private String mStatus;
+    private String mFault;
 
     public static InstanceActionFragment newInstance() {
         return new InstanceActionFragment();
@@ -38,14 +41,16 @@ public class InstanceActionFragment extends ActionFragment {
             RequestBody action = null;
             @Override
             public void onClick(View v) {
-                switch(v.getId()){
+                switch (v.getId()) {
                     case 0:
-                        if(isStart)
+                        if (isStart)
                             action = MakeBody.action("os-start");
                         else
                             action = MakeBody.action("os-stop");
                         break;
                     case 1:
+                        action = MakeBody.rebootServer();
+                        break;
                     case 2:
                     case 3:
                         action = MakeBody.action("suspend");
@@ -54,6 +59,10 @@ public class InstanceActionFragment extends ActionFragment {
                         action = MakeBody.action("lock");
                         break;
                 }
+                if(mIsLoading)
+                    return;
+                mLoadingBar.setVisibility(VISIBLE);
+                mIsLoading = true;
 
                 Call<ResponseBody> novaCall = mInterface.action(cToken, cDetailId, action);
                 novaCall.enqueue(new Callback<ResponseBody>() {
@@ -63,12 +72,10 @@ public class InstanceActionFragment extends ActionFragment {
                             Toast.makeText(getContext(), "Action Success", Toast.LENGTH_SHORT).show();
                             if (response != null)
                                 mMyview.setText(response.message());
-                            if(actionEvent.equals("lock")){
-                                mLockBtn.setText("Unlock");
-                            }
                         } else {
                             mMyview.setText(getError(mRetrofit, response.errorBody(), 1));
                         }
+                        mIsLoading = false;
                     }
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -86,14 +93,20 @@ public class InstanceActionFragment extends ActionFragment {
         return view;
     }
 
-    public void update(String status){
-        if (status.equals("SHUTOFF")) {
+    public void update(ServerVO vo){
+        if(!mIsLoading)
+            mLoadingBar.setVisibility(GONE);
+        if (vo.status.equals("SHUTOFF")) {
             mStartBtn.setText("Start");
             isStart = true;
         } else {
             mStartBtn.setText("Stop");
             isStart = false;
         }
-        mStatusView.setText("Status : " + status);
+        mStatusView.setText("Status : " + vo.status);
+        if(!vo.fault.code.equals(mFault)) {
+            mMyview.setText(vo.fault.message);
+            mFault = vo.fault.code;
+        }
     }
 }

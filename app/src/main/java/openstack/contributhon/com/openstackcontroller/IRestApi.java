@@ -2,14 +2,16 @@ package openstack.contributhon.com.openstackcontroller;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import openstack.contributhon.com.openstackcontroller.glance.ImageVO;
+import openstack.contributhon.com.openstackcontroller.model.ImageVO;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface IRestApi {
@@ -22,13 +24,16 @@ public interface IRestApi {
     @POST("/compute/v2.1/servers")
     Call<ResponseBody> createServer(@Header("X-Auth-Token") String token, @Body RequestBody body);
 
+    @PUT("/compute/v2.1/servers/{server_id}")
+    Call<ResponseBody> editServer(@Header("X-Auth-Token") String token, @Body RequestBody body, @Path("server_id") String id);
+
     @DELETE("/compute/v2.1/servers/{server_id}")
     Call<Void> deleteServer(@Header("X-Auth-Token") String token, @Path("server_id") String id);
 
     @POST("/compute/v2.1/servers/{server_id}/action")
     Call<ResponseBody> action(@Header("X-Auth-Token") String token, @Path("server_id") String id, @Body RequestBody body);
 
-    @GET("/compute/v2.1/flavors")
+    @GET("/compute/v2.1/flavors/detail")
     Call<JsonConverter> getFlavorList(@Header("X-Auth-Token") String token);
 
     @GET("/compute/v2.1/flavors/{flavor_id}")
@@ -61,11 +66,17 @@ public interface IRestApi {
     @POST("/v2.0/networks")
     Call<Void> createNetwork(@Header("X-Auth-Token") String token, @Body RequestBody body);
 
+    @PUT("/v2.0/networks/{network_id}")
+    Call<Void> editNetwork(@Header("X-Auth-Token") String token, @Body RequestBody body, @Path("network_id") String id);
+
     @GET("/v2.0/routers")
     Call<JsonConverter> getRouterList(@Header("X-Auth-Token") String token);
 
-    @POST("/v2.0/routers")
-    Call<Void> createRouter(@Header("X-Auth-Token") String token, @Body RequestBody body);
+    @POST("/v2.0/routers}")
+    Call<ResponseBody> createRouter(@Header("X-Auth-Token") String token, @Body RequestBody body);
+
+    @PUT("/v2.0/routers/{router_id}")
+    Call<ResponseBody> editRouter(@Header("X-Auth-Token") String token, @Body RequestBody body, @Path("router_id") String id);
 
     @GET("/v2.0/routers/{router_id}")
     Call<JsonConverter> getRouterDetail(@Header("X-Auth-Token") String token, @Path("router_id") String id);
@@ -88,6 +99,10 @@ public interface IRestApi {
 
     @POST("/image/v2/images")
     Call<Void> createImage(@Header("X-Auth-Token") String token, @Body RequestBody body);
+
+    @PATCH("/image/v2/images/{image_id}")
+    @Headers("Content-Type: application/openstack-images-v2.1-json-patch")
+    Call<Void> editImage(@Header("X-Auth-Token") String token, @Body RequestBody body, @Path("image_id") String id);
 
     @POST("/image/v2/images/{image_id}/actions/deactivate")
     Call<ResponseBody> deactivate(@Header("X-Auth-Token") String token, @Path("image_id") String id);

@@ -2,8 +2,9 @@ package openstack.contributhon.com.openstackcontroller.detail;
 
 import android.support.v4.util.Pair;
 
-import openstack.contributhon.com.openstackcontroller.action.FlavorActionFragment;
-import openstack.contributhon.com.openstackcontroller.nova.Model.ServerVO;
+import openstack.contributhon.com.openstackcontroller.model.ServerVO;
+
+import static android.view.View.GONE;
 
 public class InstanceDetailFragment extends DetailFragment {
 
@@ -12,10 +13,12 @@ public class InstanceDetailFragment extends DetailFragment {
     }
 
     public void setAll(ServerVO server){
+        mLoadingBar.setVisibility(GONE);
         mItemList.clear();
         mItemList.add(Pair.create("Name", "Value"));
         mItemList.add(Pair.create("name", server.name));
         mItemList.add(Pair.create("id", server.id));
+        mItemList.add(Pair.create("flavor_id", server.flavor.id));
         mItemList.add(Pair.create("address", server.address));
         mItemList.add(Pair.create("IPv4", server.accessIPv4));
         mItemList.add(Pair.create("IPv6", server.accessIPv6));

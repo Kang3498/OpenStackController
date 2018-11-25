@@ -17,9 +17,7 @@ import openstack.contributhon.com.openstackcontroller.action.ImageActionFragment
 import openstack.contributhon.com.openstackcontroller.detail.ImageDetailFragment;
 import openstack.contributhon.com.openstackcontroller.detail.NetworkDetailFragment;
 import openstack.contributhon.com.openstackcontroller.detail.RouterDetailFragment;
-import openstack.contributhon.com.openstackcontroller.glance.ImageVO;
-import openstack.contributhon.com.openstackcontroller.action.FlavorActionFragment;
-import openstack.contributhon.com.openstackcontroller.nova.Fragment.KeypairActionFragment;
+import openstack.contributhon.com.openstackcontroller.model.ImageVO;
 import openstack.contributhon.com.openstackcontroller.detail.InstanceDetailFragment;
 import openstack.contributhon.com.openstackcontroller.action.InstanceActionFragment;
 import retrofit2.Call;
@@ -130,19 +128,9 @@ public class TabAdapter extends FragmentStatePagerAdapter {
                     case R.id.menu_instance:
                         mInstanceActionFragmnet = InstanceActionFragment.newInstance();
                         return mInstanceActionFragmnet;
-                    case R.id.menu_flavor:
-                        return FlavorActionFragment.newInstance();
-                    case R.id.menu_keypair:
-                        return KeypairActionFragment.newInstance();
                     case R.id.menu_image:
                         mImageActionFragment = ImageActionFragment.newInstance();
                         return mImageActionFragment;
-                    case R.id.menu_network:
-                        mNetworkActionFragment = NetworkActionFragment.newInstance();
-                        return mNetworkActionFragment;
-                    case R.id.menu_router:
-                        mRouterActionFragment = RouterActionFragment.newInstance();
-                        return mRouterActionFragment;
                 }
                 return null;
             default:
@@ -167,7 +155,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
                     if (cCurrentTab == DETAIL)
                         mInstanceDetailFragmnet.setAll(server.getDetailServer());
                     else
-                        mInstanceActionFragmnet.update(server.getDetailServer().status);
+                        mInstanceActionFragmnet.update(server.getDetailServer());
                 }
             }
 

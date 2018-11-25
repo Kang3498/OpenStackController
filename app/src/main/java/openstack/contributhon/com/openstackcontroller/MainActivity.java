@@ -1,17 +1,20 @@
 package openstack.contributhon.com.openstackcontroller;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.PopupMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Calendar;
 import io.realm.Realm;
@@ -19,6 +22,7 @@ import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import okhttp3.ResponseBody;
+import openstack.contributhon.com.openstackcontroller.adapter.SessionAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,7 +34,6 @@ import static openstack.contributhon.com.openstackcontroller.Config.*;
 public class MainActivity extends AppCompatActivity {
 
     AlertDialog mUserinfoDialog;
-    AlertDialog mSessionDialog;
     private Realm mRealm;
     private SessionAdapter mAdapter;
 
@@ -54,17 +57,16 @@ public class MainActivity extends AppCompatActivity {
         mRealm = Realm.getInstance(realmConfig);
 
         RealmResults<SessionVO> vos = mRealm.where(SessionVO.class).sort("date", Sort.DESCENDING).findAll();
-        mAdapter = new SessionAdapter(vos);
+        mAdapter = new SessionAdapter(vos, MainActivity.this);
         listview.setAdapter(mAdapter);
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
-                itemDialog(pos);
+                itemDialog(pos, null);
                 return true;
             }
         });
-
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
             @Override
@@ -89,41 +91,31 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public void itemDialog(final int pos) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        View view = getLayoutInflater().inflate(R.layout.dialog_session, null);
-        final TextView host = view.findViewById(R.id.session_name);
-        host.setText(mAdapter.getItem(pos).name);
-
-        final TextView edit = view.findViewById(R.id.session_edit);
-        final TextView delete = view.findViewById(R.id.session_delete);
-
-        edit.setOnClickListener(new View.OnClickListener() {
+    public void itemDialog(final int pos, View v) {
+        Context wrapper = new ContextThemeWrapper(this, R.style.PopupmenuStyle);
+        PopupMenu p = new PopupMenu(wrapper, v);
+        p.getMenuInflater().inflate(R.menu.menu_popup, p.getMenu());
+        p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
-            public void onClick(View v) {
-                userDialog(mAdapter.getItem(pos).id);
-                mSessionDialog.dismiss();
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.edit:
+                        userDialog(mAdapter.getItem(pos).id);
+                        break;
+                    case R.id.delete:
+                        mRealm.beginTransaction();
+                        SessionVO vo = mRealm.where(SessionVO.class)
+                                .equalTo("id", mAdapter.getItem(pos).id)
+                                .findFirst();
+                        vo.deleteFromRealm();
+                        mRealm.commitTransaction();
+                        mAdapter.notifyDataSetChanged();
+                        break;
+                }
+                return false;
             }
         });
-
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mRealm.beginTransaction();
-                SessionVO vo = mRealm.where(SessionVO.class)
-                        .equalTo("id", mAdapter.getItem(pos).id)
-                        .findFirst();
-                vo.deleteFromRealm();
-                mRealm.commitTransaction();
-                mAdapter.notifyDataSetChanged();
-                mSessionDialog.dismiss();
-
-            }
-        });
-
-        builder.setView(view);
-        mSessionDialog = builder.create();
-        mSessionDialog.show();
+        p.show();
     }
 
     public void userDialog(final int id) {
