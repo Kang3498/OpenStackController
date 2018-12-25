@@ -23,7 +23,7 @@
 
     <TextView
         style="@style/DialogLabel"
-        android:text="Address" />
+        android:text="Address (Do not add version path, just address)" />
 
     <EditText
         android:id="@+id/address"

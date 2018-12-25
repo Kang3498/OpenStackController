@@ -182,15 +182,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String checkURL(String s) {
-        if (!s.startsWith("http://"))
-            s = "http://" + s;
-        if (s.endsWith("/"))
-            s = s.substring(0, s.length() - 1);
-        return s;
+        String[] sarr = s.split("/");
+        if (s.startsWith("http://"))
+            return "http://" + sarr[2];
+        else
+            return "http://" + sarr[0];
     }
 
     private void checkConnection(final String host, final String domain, final String user, final String password, final int id) {
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(host)
                 .addConverterFactory(GsonConverterFactory.create())
